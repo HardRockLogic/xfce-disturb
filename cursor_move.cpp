@@ -13,14 +13,14 @@ int main() {
     return 1;
 
   Window root = DefaultRootWindow(display);
+  XScreenSaverInfo *info = XScreenSaverAllocInfo();
+
   int root_x, root_y, win_x, win_y;
   unsigned int mask;
+
   // Query cursor posirion
   XQueryPointer(display, root, &root, &root, &root_x, &root_y, &win_x, &win_y,
                 &mask);
-
-  // Allocating scrnsaver info
-  XScreenSaverInfo *info = XScreenSaverAllocInfo();
 
   std::cout << "root(x,y) " << root_x << " " << root_y << "\n";
   std::cout << "window(x,y) " << win_x << " " << win_y << "\n";
@@ -32,8 +32,8 @@ int main() {
   // std::cout << "idle itme: " << info->idle << "\n";
 
   // Set new position
-  XWarpPointer(display, None, root, 0, 0, 0, 0, root_x, root_y + 2);
-  XFlush(display);
+  // XWarpPointer(display, None, root, 0, 0, 0, 0, root_x, root_y + 1);
+  // XFlush(display);
 
   // Faking key event
   KeyCode a_keycode = XKeysymToKeycode(display, XK_Shift_L);
