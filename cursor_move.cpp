@@ -4,47 +4,68 @@
 #include <X11/keysym.h>
 #include <chrono>
 #include <iostream>
+#include <signal.h>
 #include <thread>
 
+Display *display = nullptr;
+XScreenSaverInfo *info = nullptr;
+
+void singalHeader(int signum) {
+  if (display) {
+    XCloseDisplay(display);
+    std::cout << "X11 display closed.\n";
+  }
+  if (info) {
+    XFree(info);
+    std::cout << "Screen Saver info freed.\n";
+  }
+  exit(signum);
+}
+
 int main() {
-  Display *display = XOpenDisplay(nullptr);
+  signal(SIGINT, singalHeader);
+
+  display = XOpenDisplay(nullptr);
 
   if (!display)
     return 1;
 
   Window root = DefaultRootWindow(display);
-  XScreenSaverInfo *info = XScreenSaverAllocInfo();
+  info = XScreenSaverAllocInfo();
 
   int root_x, root_y, win_x, win_y;
   unsigned int mask;
 
-  // Query cursor posirion
-  XQueryPointer(display, root, &root, &root, &root_x, &root_y, &win_x, &win_y,
-                &mask);
+  while (1) {
+    XScreenSaverQueryInfo(display, root, info);
 
-  std::cout << "root(x,y) " << root_x << " " << root_y << "\n";
-  std::cout << "window(x,y) " << win_x << " " << win_y << "\n";
+    if (info->idle >= 240000) {
+      std::cout << "Shift Shot\n";
 
-  // 4 mins sleep is a 240s
-  std::this_thread::sleep_for(std::chrono::seconds(4));
+      // XQueryPointer(display, root, &root, &root, &root_x, &root_y, &win_x,
+      //               &win_y, &mask);
 
-  // XScreenSaverQueryInfo(display, root, info);
-  // std::cout << "idle itme: " << info->idle << "\n";
+      // XScreenSaverQueryInfo(display, root, info);
+      // std::cout << "idle itme: " << info->idle << "\n";
 
-  // Set new position
-  // XWarpPointer(display, None, root, 0, 0, 0, 0, root_x, root_y + 1);
-  // XFlush(display);
+      // Set new position
+      // XWarpPointer(display, None, root, 0, 0, 0, 0, root_x, root_y + 1);
+      // XFlush(display);
 
-  // Faking key event
-  KeyCode a_keycode = XKeysymToKeycode(display, XK_Shift_L);
+      // Faking key event
+      KeyCode a_keycode = XKeysymToKeycode(display, XK_Shift_L);
 
-  // Press and release
-  XTestFakeKeyEvent(display, a_keycode, True, 0);
-  XTestFakeKeyEvent(display, a_keycode, False, 0);
-  XFlush(display);
+      // Press and release
+      XTestFakeKeyEvent(display, a_keycode, True, 0);
+      XTestFakeKeyEvent(display, a_keycode, False, 0);
+      XFlush(display);
 
-  XScreenSaverQueryInfo(display, root, info);
-  std::cout << "idle itme: " << info->idle << "\n";
+    } else {
+      unsigned long eta = 240000 - info->idle;
+      std::cout << "ETA: " << eta << "\n";
+      std::this_thread::sleep_for(std::chrono::milliseconds(eta));
+    }
+  }
 
   XFree(info);
   XCloseDisplay(display);
