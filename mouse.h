@@ -7,13 +7,9 @@ class Mouse {
 private:
   bool position_state_;
 
-  Display *display;
-  Window root;
-  int root_x, root_y, win_x, win_y;
-  unsigned int mask;
-
 public:
-  void disturbe();
+  Mouse();
+  void disturbe(Display *, Window, int &, int &, int &, int &, unsigned int &);
 };
 
 #endif

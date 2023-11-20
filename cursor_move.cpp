@@ -45,9 +45,6 @@ int main() {
       // XQueryPointer(display, root, &root, &root, &root_x, &root_y, &win_x,
       //               &win_y, &mask);
 
-      // XScreenSaverQueryInfo(display, root, info);
-      // std::cout << "idle itme: " << info->idle << "\n";
-
       // Set new position
       // XWarpPointer(display, None, root, 0, 0, 0, 0, root_x, root_y + 1);
       // XFlush(display);
