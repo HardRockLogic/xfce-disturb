@@ -19,6 +19,7 @@ void singalHeader(int signum) {
     XFree(info);
     std::cout << "Screen Saver info freed.\n";
   }
+  std::cout << signum;
   exit(signum);
 }
 
