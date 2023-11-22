@@ -1,3 +1,4 @@
+#include "mouse.h"
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 #include <X11/extensions/scrnsaver.h>
@@ -9,6 +10,8 @@
 
 Display *display = nullptr;
 XScreenSaverInfo *info = nullptr;
+// Mills constant
+unsigned long const wait = 240000;
 
 void singalHeader(int signum) {
   if (display) {
@@ -19,7 +22,6 @@ void singalHeader(int signum) {
     XFree(info);
     std::cout << "Screen Saver info freed.\n";
   }
-  std::cout << signum;
   exit(signum);
 }
 
@@ -37,11 +39,15 @@ int main() {
   int root_x, root_y, win_x, win_y;
   unsigned int mask;
 
+  Mouse mouse;
+
   while (1) {
     XScreenSaverQueryInfo(display, root, info);
 
-    if (info->idle >= 240000) {
+    if (info->idle >= wait) {
       std::cout << "Shift Shot\n";
+
+      mouse.disturbe(display, &root, &root_x, &root_y, &win_x, &win_y, &mask);
 
       // XQueryPointer(display, root, &root, &root, &root_x, &root_y, &win_x,
       //               &win_y, &mask);
@@ -59,7 +65,7 @@ int main() {
       XFlush(display);
 
     } else {
-      unsigned long eta = 240000 - info->idle;
+      unsigned long eta = wait - info->idle;
       std::cout << "ETA: " << eta << "\n";
       std::this_thread::sleep_for(std::chrono::milliseconds(eta));
     }
