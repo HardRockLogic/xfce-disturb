@@ -16,7 +16,7 @@ unsigned long const wait = 240000;
 void singalHeader(int signum) {
   if (display) {
     XCloseDisplay(display);
-    std::cout << "X11 display closed.\n";
+    std::cout << "\nX11 display closed.\n";
   }
   if (info) {
     XFree(info);

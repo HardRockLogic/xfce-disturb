@@ -20,7 +20,6 @@ void Mouse::disturbe(Display *display, Window *root, int *root_x, int *root_y,
 
   XWarpPointer(display, None, *root, 0, 0, 0, 0, *root_x, *root_y + step);
   XFlush(display);
-  std::cout << "mouse warped by: " << step << '\n';
 
   position_state_ = !position_state_;
 }

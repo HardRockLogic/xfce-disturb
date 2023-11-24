@@ -12,4 +12,7 @@ cursor_move: cursor_move.o mouse.o
 	g++ $^ $(CXXFLAGS) -o $@ 
 
 clean: 
-	@rm -f cursor_move
+	@rm -f cursor_move 
+
+rmobj: 
+	@rm mouse.o cursor_move.o
