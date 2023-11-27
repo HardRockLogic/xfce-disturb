@@ -1,4 +1,5 @@
 #include "mouse.h"
+#include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 #include <X11/extensions/scrnsaver.h>
@@ -48,13 +49,6 @@ int main() {
       std::cout << "Shift Shot\n";
 
       mouse.disturbe(display, &root, &root_x, &root_y, &win_x, &win_y, &mask);
-
-      // XQueryPointer(display, root, &root, &root, &root_x, &root_y, &win_x,
-      //               &win_y, &mask);
-
-      // Set new position
-      // XWarpPointer(display, None, root, 0, 0, 0, 0, root_x, root_y + 1);
-      // XFlush(display);
 
       // Faking key event
       KeyCode a_keycode = XKeysymToKeycode(display, XK_Shift_L);
