@@ -8,7 +8,7 @@ private:
   bool position_state_;
 
 public:
-  inline Mouse() = default;
+  Mouse();
   void disturbe(Display *, Window *, int *, int *, int *, int *,
                 unsigned int *);
 };

@@ -11,8 +11,8 @@
 
 Display *display = nullptr;
 XScreenSaverInfo *info = nullptr;
-// Mills constant
-unsigned long const wait = 240000;
+// Mills constant -> 240000 is 4secs in mills
+unsigned long const wait = 5000;
 
 void singalHeader(int signum) {
   if (display) {
@@ -40,7 +40,7 @@ int main() {
   int root_x, root_y, win_x, win_y;
   unsigned int mask;
 
-  Mouse mouse;
+  Mouse mouse{};
 
   while (1) {
     XScreenSaverQueryInfo(display, root, info);
